@@ -1,0 +1,10 @@
+{
+  "name": "nexus",
+  "description": "Squad de pesquisa acadêmica: 7 agentes especializados coordenados pelo NEXUS para literatura científica, redação, análise crítica, revisão por pares, dados e metodologia.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Gustavo",
+    "email": ""
+  },
+  "keywords": ["research", "academic", "science", "writing", "electrochemistry", "literature-review"]
+}
