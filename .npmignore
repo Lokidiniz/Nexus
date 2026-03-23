@@ -1,0 +1,23 @@
+# Git
+.git/
+.github/
+
+# IDE rules (local only)
+.cursor/
+.gemini/
+
+# Dev files
+*.ps1
+*.sh
+sync-ide.sh
+install.sh
+install.ps1
+nexus/
+
+# Docs (too heavy for npm)
+docs/
+examples/
+
+# Temp
+*.tmp
+*.log

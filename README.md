@@ -1,10 +1,13 @@
-# NEXUS — Squad de Pesquisa Acadêmica v2.0
+# NEXUS — Squad de Pesquisa Acadêmica v3.0
 
-> Plugin que transforma o **Claude Code** em um assistente científico completo, com 7 agentes especializados coordenados pelo NEXUS para cobrir todo o ciclo de vida de uma publicação científica. Funciona em **PT-BR · EN · ES**.
+> Framework open-source de orquestração de IA que transforma o **Claude Code** em um assistente científico completo, com 7 agentes especializados coordenados pelo NEXUS para cobrir todo o ciclo de vida de uma publicação científica. Funciona em **PT-BR · EN · ES** — Claude Code · Cursor · Gemini CLI.
 
 [![Claude Code](https://img.shields.io/badge/Claude_Code-compatible-purple)](https://claude.ai/code)
+[![npm](https://img.shields.io/badge/npm-nexus--research-red)](https://www.npmjs.com/package/nexus-research)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-2.0-blue)]()
+[![Version](https://img.shields.io/badge/version-3.0-blue)]()
+[![CI](https://github.com/Lokidiniz/Nexus/actions/workflows/validate.yml/badge.svg)](https://github.com/Lokidiniz/Nexus/actions/workflows/validate.yml)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 ---
 
@@ -40,26 +43,27 @@ O **NEXUS** é o coordenador que orquestra todos eles.
 ### Pré-requisito
 [Claude Code](https://claude.ai/code) instalado e configurado.
 
-### Instalação automática (Linux/macOS/WSL)
+### Via npm (recomendado — 1 comando)
+```bash
+npx nexus-research init
+```
+Instala automaticamente: agentes, workflows, tasks, teams, hooks. Sem dependências.
+
+### Via script (Linux/macOS/WSL)
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Lokidiniz/Nexus/main/install.sh | bash
 ```
 
-### Instalação automática (Windows PowerShell)
+### Via script (Windows PowerShell)
 ```powershell
 irm https://raw.githubusercontent.com/Lokidiniz/Nexus/main/install.ps1 | iex
 ```
 
-### Instalação manual
+### Manual
 ```bash
-# 1. Clone o repositório
 git clone https://github.com/Lokidiniz/Nexus.git
 cd Nexus
-
-# 2. Copie os agentes
 cp agents/*.md ~/.claude/agents/
-
-# 3. Copie as skills
 cp -r skills/* ~/.claude/skills/
 ```
 
@@ -101,6 +105,28 @@ cp -r skills/* ~/.claude/skills/
 /nexus calcular LOD/LOQ dos meus dados de DPV
 /nexus pôster científico para congresso de eletroquímica
 ```
+
+---
+
+## Exemplos de uso reais
+
+Veja a pasta [`examples/`](examples/) para walkthroughs completos:
+
+| Área | Exemplo |
+|------|---------|
+| Eletroquímica | [Sensor ZIF-8 para dopamina — manuscrito completo](examples/electrochemistry/sensor-zif8-dopamine.md) |
+| Educação | [Percepção de professores sobre inclusão — pesquisa qualitativa](examples/education/teacher-perception-inclusion.md) |
+| Saúde | [Rebuttal para ensaio clínico — Cadernos de Saúde Pública](examples/health/clinical-trial-rebuttal.md) |
+
+---
+
+## Compatibilidade com IDEs
+
+| IDE | Ativação | Arquivo |
+|-----|----------|---------|
+| Claude Code | Automática ao abrir o projeto | `.claude/CLAUDE.md` |
+| Cursor | `alwaysApply: true` | `.cursor/rules/nexus.mdc` |
+| Gemini CLI | Automática (GEMINI.md) | `.gemini/GEMINI.md` |
 
 ---
 

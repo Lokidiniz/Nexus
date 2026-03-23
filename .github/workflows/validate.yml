@@ -1,0 +1,76 @@
+name: NEXUS Validate
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate-agents:
+    name: Validate agent frontmatter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Validate agent files
+        run: python .github/scripts/validate_agents.py
+
+  validate-workflows:
+    name: Validate workflow YAML
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Validate workflow files
+        run: python .github/scripts/validate_workflows.py
+
+  validate-tasks:
+    name: Validate task files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check task structure
+        run: python .github/scripts/validate_tasks.py
+
+  validate-constitution:
+    name: Check constitution compliance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for forbidden placeholders
+        run: |
+          echo "Checking for forbidden [N] placeholders..."
+          if grep -rn '\[N\]' agents/ tasks/ workflows/ --include="*.md" --include="*.yaml"; then
+            echo "ERROR: Found forbidden [N] placeholders. Use [REF NEEDED: description] instead."
+            exit 1
+          fi
+          echo "OK: No forbidden placeholders found."
+
+      - name: Check constitution files exist
+        run: |
+          for f in .nexus/constitution.md .nexus/activation-pipeline.md .nexus/rds.md; do
+            if [ ! -f "$f" ]; then
+              echo "ERROR: Missing required file: $f"
+              exit 1
+            fi
+          done
+          echo "OK: All constitution files present."
