@@ -1,0 +1,22 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "nexus-marketplace",
+  "description": "Squad de pesquisa acadêmica NEXUS — 7 agentes especializados para literatura científica, redação, análise crítica e revisão por pares.",
+  "owner": {
+    "name": "Gustavo",
+    "email": ""
+  },
+  "plugins": [
+    {
+      "name": "nexus",
+      "description": "Squad completo de pesquisa acadêmica: NEXUS (coordenador) + 6 agentes especializados (literatura, análise crítica, redação, revisão por pares, dados, metodologia) + skills /pesquisa e /texto-cientifico.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Gustavo",
+        "email": ""
+      },
+      "source": "./nexus",
+      "category": "research"
+    }
+  ]
+}

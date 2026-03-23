@@ -1,6 +1,6 @@
 # NEXUS — Squad de Pesquisa Acadêmica v2.0
 
-> Sistema de agentes de IA para pesquisa científica de alto impacto, construído sobre **Claude Code** (Anthropic). Funciona em **PT-BR · EN · ES**.
+> Plugin que transforma o **Claude Code** em um assistente científico completo, com 7 agentes especializados coordenados pelo NEXUS para cobrir todo o ciclo de vida de uma publicação científica. Funciona em **PT-BR · EN · ES**.
 
 [![Claude Code](https://img.shields.io/badge/Claude_Code-compatible-purple)](https://claude.ai/code)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -12,14 +12,14 @@
 
 O **NEXUS** é um sistema de 6 agentes especializados que opera dentro do Claude Code para auxiliar pesquisadores em todas as etapas da produção científica:
 
-| Agente | Inglês (nome técnico) | Especialidade |
-|--------|----------------------|---------------|
-| Pesquisador de Literatura | `literature-researcher` | Busca sistemática, estado da arte |
-| Metodologista | `methodologist` | Design de pesquisa, amostragem, ética |
-| Analista Crítico | `critical-analyst` | Rigor metodológico, lacunas, argumentação |
-| Redator Científico | `scientific-writer` | Redação IMRAD, ABNT, cover letter, rebuttal |
-| Revisor de Pares | `peer-reviewer` | Pré-revisão simulando qualquer periódico |
-| Especialista em Dados | `data-specialist` | Análise quanti/quali, LOD/LOQ, figuras |
+| Agente | Nome técnico | Especialidade |
+|--------|-------------|---------------|
+| Literature Researcher | `literature-researcher` | Busca sistemática, estado da arte |
+| Methodologist | `methodologist` | Design de pesquisa, amostragem, ética |
+| Critical Analyst | `critical-analyst` | Rigor metodológico, lacunas, argumentação |
+| Scientific Writer | `scientific-writer` | Redação IMRAD, ABNT, cover letter, rebuttal |
+| Peer Reviewer | `peer-reviewer` | Pré-revisão simulando qualquer periódico |
+| Data Specialist | `data-specialist` | Análise quanti/quali, LOD/LOQ, figuras |
 
 O **NEXUS** é o coordenador que orquestra todos eles.
 
@@ -42,19 +42,19 @@ O **NEXUS** é o coordenador que orquestra todos eles.
 
 ### Instalação automática (Linux/macOS/WSL)
 ```bash
-curl -fsSL https://raw.githubusercontent.com/SEU_USUARIO/nexus-squad/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Lokidiniz/Nexus/main/install.sh | bash
 ```
 
 ### Instalação automática (Windows PowerShell)
 ```powershell
-irm https://raw.githubusercontent.com/SEU_USUARIO/nexus-squad/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/Lokidiniz/Nexus/main/install.ps1 | iex
 ```
 
 ### Instalação manual
 ```bash
 # 1. Clone o repositório
-git clone https://github.com/SEU_USUARIO/nexus-squad.git
-cd nexus-squad
+git clone https://github.com/Lokidiniz/Nexus.git
+cd Nexus
 
 # 2. Copie os agentes
 cp agents/*.md ~/.claude/agents/
@@ -67,53 +67,47 @@ cp -r skills/* ~/.claude/skills/
 
 ## Como usar
 
-### Ativar o NEXUS
-No Claude Code, use o skill `/nexus`:
-```
+### Ativar o NEXUS no Claude Code
+
+```bash
+# Auto-detecta idioma (PT-BR/EN/ES)
 /nexus Preciso de uma revisão de literatura sobre sensores eletroquímicos com ZIF-8
+
+# Modo inglês
+/nexus-en Write the Introduction for Biosensors & Bioelectronics
+
+# Modo espanhol
+/nexus-es Necesito una propuesta para CONACYT
 ```
 
-Ou em inglês:
-```
-/nexus-en I need to write a manuscript for Biosensors & Bioelectronics
-```
+### Comandos diretos
 
-Ou em espanhol:
-```
-/nexus-es Necesito una propuesta de investigación para CONACYT
-```
+| Comando | O que faz |
+|---------|-----------|
+| `/nexus [tarefa]` | Ativa NEXUS (auto-idioma) |
+| `/nexus-en [task]` | NEXUS em inglês |
+| `/nexus-es [tarea]` | NEXUS em espanhol |
+| `/pesquisa [tema]` | Busca rápida no Consensus |
+| `/texto-cientifico [seção]` | Redação de seção isolada |
 
 ### Exemplos de uso
 
-```bash
-# Revisão sistemática de literatura
+```
 /nexus revisão sistemática sobre aprendizagem ativa no ensino médio
-
-# Escrever seção de manuscrito
-/nexus escrever introdução para Electrochimica Acta --journal "Electrochimica Acta"
-
-# Pré-revisão antes de submissão
-/nexus revisar manuscrito como revisor do ACS Sensors
-
-# Proposta CNPq
-/nexus proposta de pesquisa CNPq --stage ideia
-
-# Capítulo de dissertação
-/nexus capítulo de revisão de literatura da minha dissertação em química
-
-# Análise de dados
+/nexus escrever manuscrito completo para Electrochimica Acta
+/nexus revisar rascunho como revisor do ACS Sensors
+/nexus proposta CNPq sobre sensores descartáveis para segurança alimentar
+/nexus capítulo de revisão de literatura da minha dissertação
 /nexus calcular LOD/LOQ dos meus dados de DPV
-
-# Pôster científico
-/nexus pôster para congresso de eletroquímica
+/nexus pôster científico para congresso de eletroquímica
 ```
 
 ---
 
 ## Pipelines Disponíveis
 
-| Tarefa | Agentes | Tempo estimado |
-|--------|---------|----------------|
+| Tarefa | Agentes | Tempo est. |
+|--------|---------|-----------|
 | Revisão de literatura | literature-researcher → critical-analyst → scientific-writer | ~5 min |
 | Manuscrito completo | 6 agentes em sequência | ~15 min |
 | Análise de dados | data-specialist → critical-analyst | ~3 min |
@@ -123,14 +117,45 @@ Ou em espanhol:
 | Pôster científico | data-specialist → scientific-writer | ~3 min |
 | Rebuttal | peer-reviewer + critical-analyst → scientific-writer | ~5 min |
 
+### Pipelines automáticos (diagrama)
+
+```
+Revisão de Literatura
+  literature-researcher → critical-analyst → scientific-writer
+
+Manuscrito Completo
+  literature-researcher ┐
+                         ├→ critical-analyst → scientific-writer → peer-reviewer
+  data-specialist       ┘
+
+Revisão de Manuscrito
+  peer-reviewer  ┐
+                  ├→ scientific-writer
+  critical-analyst┘
+
+Proposta de Fomento
+  literature-researcher ┐
+                          ├→ critical-analyst → scientific-writer
+  methodologist          ┘
+```
+
+---
+
+## Requisitos de MCP
+
+Para uso completo das ferramentas de busca, configure no Claude Code:
+
+- **Consensus** — síntese de literatura científica (disponível em claude.ai)
+- **PubMed** (opcional) — base de dados biomédica/química
+
 ---
 
 ## Estrutura do Repositório
 
 ```
-nexus-squad/
-├── agents/                    # Agentes NEXUS
-│   ├── nexus.md               # Coordenador principal
+Nexus/
+├── agents/                    # Agentes do squad
+│   ├── nexus.md               # Coordenador principal (Opus)
 │   ├── literature-researcher.md
 │   ├── methodologist.md
 │   ├── critical-analyst.md
@@ -140,9 +165,7 @@ nexus-squad/
 ├── skills/                    # Skills de ativação
 │   ├── nexus/                 # /nexus (auto-detecta idioma)
 │   ├── nexus-en/              # /nexus-en (English)
-│   ├── nexus-es/              # /nexus-es (Español)
-│   ├── pesquisa/              # /pesquisa (busca rápida Consensus)
-│   └── texto-cientifico/      # /texto-cientifico (redação rápida)
+│   └── nexus-es/              # /nexus-es (Español)
 ├── install.sh                 # Instalador Linux/macOS/WSL
 ├── install.ps1                # Instalador Windows
 ├── CHANGELOG.md               # Histórico de versões
@@ -153,18 +176,23 @@ nexus-squad/
 
 ## Contribuição
 
-Pull requests são bem-vindos! Para contribuir:
+Pull requests são bem-vindos!
 1. Fork o repositório
 2. Crie uma branch: `git checkout -b feature/novo-pipeline`
-3. Commit suas mudanças: `git commit -m 'Add: pipeline para revisão de artigo em direito'`
-4. Push: `git push origin feature/novo-pipeline`
-5. Abra um Pull Request
+3. Commit: `git commit -m 'Add: pipeline para revisão em direito'`
+4. Push e abra um Pull Request
+
+---
+
+## Contexto de desenvolvimento
+
+Desenvolvido para pesquisa em **sensores eletroquímicos** com MOFs/ZIFs e impressão 3D (FDM/DIW), laboratório de eletroquímica UFMA. Funciona para qualquer área: química, saúde, educação, engenharia, ciências sociais.
 
 ---
 
 ## Licença
 
-MIT — use livremente, inclusive para fins comerciais. Dê os créditos.
+MIT — livre para usar, adaptar e distribuir. Dê os créditos.
 
 ---
 
