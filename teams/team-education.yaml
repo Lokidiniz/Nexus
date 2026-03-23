@@ -1,0 +1,72 @@
+name: Team Education
+slug: team-education
+icon: 🎓
+description: "Specialized team for educational research — quantitative, qualitative, and mixed methods, Brazilian context"
+trigger: "*team education"
+version: 2.0.0
+
+agents:
+  primary: nexus
+  squad:
+    - literature-researcher
+    - methodologist
+    - critical-analyst
+    - scientific-writer
+    - peer-reviewer
+
+context:
+  field: "Educational Research"
+  approaches: [qualitative, quantitative, mixed_methods, action_research, phenomenology]
+  common_topics:
+    - active learning / active methodologies
+    - teacher training
+    - educational technology
+    - inclusive education
+    - curriculum
+    - educational policies (BNCC, PNE)
+    - higher education in Brazil
+  typical_journals:
+    - name: "Cadernos de Pesquisa"
+      qualis: A2
+      scope: "education + Brazilian context, qualitative and mixed methods"
+    - name: "Educação & Sociedade"
+      qualis: A1
+      scope: "sociology of education, critical theory, Brazilian context"
+    - name: "Revista Brasileira de Educação"
+      qualis: A1
+      scope: "education policy, Brazilian national issues"
+    - name: "Educational Researcher"
+      if: ~5
+      scope: "policy + educational research methodology"
+    - name: "Teaching and Teacher Education"
+      if: ~4
+      scope: "teacher training, classroom practice"
+  databases:
+    primary: [ERIC, SciELO, Periódicos_CAPES]
+    secondary: [Google_Scholar, BDTD, Biblioteca_Digital_Brasileira]
+
+methodology_defaults:
+  qualitative:
+    - phenomenology (perceptions, experiences)
+    - grounded theory (theory generation)
+    - content analysis Bardin (document analysis)
+    - case study Yin/Stake
+  quantitative:
+    - survey with validated scales
+    - quasi-experimental (educational interventions)
+    - secondary data (IDEB, PISA, ENADE, ENEM)
+  ethics:
+    - CEP/CONEP required (Resolução 510/2016)
+    - TCLE mandatory
+    - Institutional authorization required
+
+typical_pipelines:
+  qualitative_study:
+    workflow: full-manuscript
+    notes: "Emphasize credibility, transferability, reflexivity"
+  educational_policy_review:
+    workflow: literature-review
+    notes: "Include legislation analysis + comparison with international practice"
+  thesis:
+    workflow: thesis
+    notes: "ABNT format, Brazilian Portuguese"

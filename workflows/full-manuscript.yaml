@@ -1,0 +1,111 @@
+name: Full Manuscript
+slug: full-manuscript
+description: "Complete scientific article from scratch — literature to peer-reviewed draft"
+version: 2.0.0
+trigger: "*pipeline full-manuscript"
+
+inputs:
+  - name: topic
+    required: true
+  - name: target_journal
+    required: true
+    description: "Target journal name (critical — determines style and rigor)"
+  - name: data_available
+    required: false
+    description: "Brief description of available data"
+  - name: language
+    required: false
+    default: "auto-detect"
+
+phases:
+  - id: 1a
+    name: "Literature Search"
+    executor: literature-researcher
+    command: "*search {topic}"
+    parallel_group: A
+    outputs: [articles_list, key_findings, gaps]
+
+  - id: 1b
+    name: "Data Analysis"
+    executor: data-specialist
+    command: "*assess-data {data_available}"
+    parallel_group: A
+    outputs: [data_summary, figure_plan, missing_data]
+
+  - id: 2
+    name: "Novelty Validation"
+    executor: critical-analyst
+    command: "*check-novelty --journal {target_journal}"
+    depends_on: [1a, 1b]
+    inputs_from:
+      - phase: 1a
+        outputs: [articles_list, gaps]
+      - phase: 1b
+        outputs: [data_summary]
+    checkpoint: true
+    checkpoint_message: "Novelty assessed. Continue to writing?"
+    outputs: [novelty_report, positioning]
+
+  - id: 3
+    name: "Full IMRAD Writing"
+    executor: scientific-writer
+    command: "*write full-manuscript --journal {target_journal} --lang {language}"
+    depends_on: [1a, 1b, 2]
+    inputs_from:
+      - phase: 1a
+        outputs: [articles_list, key_findings]
+      - phase: 1b
+        outputs: [data_summary, figure_plan]
+      - phase: 2
+        outputs: [novelty_report, positioning]
+    outputs: [manuscript_draft]
+
+  - id: 4
+    name: "Pre-Submission Review"
+    executor: peer-reviewer
+    command: "*review --journal {target_journal}"
+    depends_on: [3]
+    inputs_from:
+      - phase: 3
+        outputs: [manuscript_draft]
+    checkpoint: true
+    checkpoint_message: "Peer review simulation complete. Apply corrections?"
+    outputs: [review_report, score]
+
+  - id: 5
+    name: "Final Revision"
+    executor: scientific-writer
+    command: "*rewrite --incorporate-review"
+    depends_on: [3, 4]
+    inputs_from:
+      - phase: 4
+        outputs: [review_report]
+    outputs: [final_manuscript]
+
+  - id: 6
+    name: "Final Delivery"
+    executor: nexus
+    action: integrate_and_deliver
+    depends_on: [1a, 1b, 2, 3, 4, 5]
+    outputs: [complete_package]
+
+quality_gates:
+  - check: references_have_doi
+    on_fail: block
+    message: "All citations must be confirmed before delivery"
+  - check: methods_reproducible
+    on_fail: warn
+    message: "Methods section must be reproducible — check detail level"
+  - check: data_supports_conclusions
+    on_fail: warn
+    message: "Verify conclusions are calibrated to evidence strength"
+
+deliverables:
+  - type: markdown
+    content: final_manuscript
+    sections: [abstract, introduction, methods, results, discussion, conclusion]
+  - type: reference_list
+  - type: cover_letter
+    optional: true
+  - type: review_report
+  - type: researcher_notes

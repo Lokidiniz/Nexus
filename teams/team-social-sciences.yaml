@@ -1,0 +1,78 @@
+name: Team Social Sciences
+slug: team-social-sciences
+icon: 🌐
+description: "Specialized team for social sciences, humanities, law, economics, political science — Brazilian and Latin American context"
+trigger: "*team social-sciences"
+version: 2.0.0
+
+agents:
+  primary: nexus
+  squad:
+    - literature-researcher
+    - methodologist
+    - critical-analyst
+    - scientific-writer
+    - peer-reviewer
+
+context:
+  field: "Social Sciences & Humanities"
+  subfields: [sociology, political_science, law, economics, anthropology, history, communication, psychology]
+  typical_journals:
+    - name: "Dados — Revista de Ciências Sociais"
+      qualis: A1
+      scope: "political and social sciences, Brazilian context, rigorous empirical analysis"
+    - name: "Lua Nova"
+      qualis: A2
+      scope: "political theory, culture, social movements"
+    - name: "Revista Brasileira de Ciências Sociais"
+      qualis: A1
+      scope: "broad social sciences, Brazilian context"
+    - name: "American Sociological Review"
+      if: ~5
+      scope: "original theoretical contribution + solid empirical evidence"
+    - name: "Latin American Politics and Society"
+      if: ~2
+      scope: "Latin American political and social analysis"
+  databases:
+    primary: [SSRN, SciELO, Periódicos_CAPES, Google_Scholar]
+    secondary: [JSTOR, IBICT, Dialnet]
+  citation_style: ABNT  # Default for Brazilian social sciences
+
+methodology_defaults:
+  qualitative:
+    - document analysis (laws, policies, reports, media)
+    - ethnography
+    - in-depth interviews (semi-structured)
+    - discourse analysis (Foucault, Fairclough)
+    - case study (Yin/Stake)
+  quantitative:
+    - survey with validated instruments
+    - secondary data analysis (IBGE, IPEA, electoral data)
+    - content analysis (systematic, quantifiable)
+  epistemological_positioning:
+    - interpretivism (understanding social meanings)
+    - critical theory (power, inequality, transformation)
+    - constructivism (social construction of reality)
+    - positivism (measurement, generalization — less common)
+
+quality_criteria:
+  qualitative:
+    - Theoretical framework coherence
+    - Adequate empirical evidence for claims
+    - Reflexivity of the researcher
+    - Credibility and transferability
+  quantitative:
+    - Representative sample (probabilistic preferred)
+    - Validated instruments for Brazilian context
+    - Adequate statistical analysis
+
+typical_pipelines:
+  theoretical_article:
+    workflow: full-manuscript
+    notes: "Argument-driven, extensive literature review, conceptual contribution"
+  empirical_qualitative:
+    workflow: full-manuscript
+    notes: "Thick description, data-evidence balance, COREQ compliance"
+  policy_analysis:
+    workflow: literature-review
+    notes: "Legislative analysis + comparative international perspective"

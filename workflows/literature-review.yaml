@@ -1,0 +1,89 @@
+name: Literature Review
+slug: literature-review
+description: "Systematic literature review — from topic to structured synthesis with real citations"
+version: 2.0.0
+trigger: "*pipeline literature-review"
+
+inputs:
+  - name: topic
+    required: true
+    description: "Research topic or question"
+  - name: field
+    required: false
+    description: "Field of knowledge"
+  - name: period
+    required: false
+    default: "last 5 years"
+  - name: target_journal
+    required: false
+  - name: language
+    required: false
+    default: "auto-detect"
+
+phases:
+  - id: 1
+    name: "Systematic Search"
+    executor: literature-researcher
+    command: "*search {topic} --period {period} --field {field}"
+    mode: inherit
+    outputs:
+      - articles_list
+      - key_findings
+      - identified_gaps
+    checkpoint: false
+
+  - id: 2
+    name: "Critical Gap Analysis"
+    executor: critical-analyst
+    command: "*analyze {articles_list} --mode gap-analysis"
+    depends_on: [1]
+    inputs_from:
+      - phase: 1
+        outputs: [articles_list, key_findings]
+    mode: inherit
+    outputs:
+      - gaps_report
+      - novelty_map
+    checkpoint: false
+
+  - id: 3
+    name: "Write Review Section"
+    executor: scientific-writer
+    command: "*write literature-review --journal {target_journal} --lang {language}"
+    depends_on: [1, 2]
+    inputs_from:
+      - phase: 1
+        outputs: [articles_list, key_findings]
+      - phase: 2
+        outputs: [gaps_report]
+    mode: inherit
+    outputs:
+      - review_text
+    checkpoint: true
+    checkpoint_message: "Review section drafted. Confirm before final delivery?"
+
+  - id: 4
+    name: "Integration & Delivery"
+    executor: nexus
+    action: integrate_and_deliver
+    depends_on: [1, 2, 3]
+    outputs:
+      - final_review
+      - citations_list
+      - researcher_notes
+
+quality_gates:
+  - check: references_have_doi
+    on_fail: warn
+    message: "Constitution Article I.1 — confirm all citations have DOI"
+  - check: gaps_identified
+    on_fail: warn
+    message: "No gaps identified — verify if field is truly saturated"
+
+deliverables:
+  - type: markdown
+    content: final_review
+  - type: reference_list
+    content: citations_list
+  - type: notes
+    content: researcher_notes

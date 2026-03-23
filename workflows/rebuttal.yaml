@@ -1,0 +1,71 @@
+name: Rebuttal
+slug: rebuttal
+description: "Response to reviewers — strategy, classification, and complete resubmission package"
+version: 2.0.0
+trigger: "*pipeline rebuttal"
+
+inputs:
+  - name: reviewer_comments
+    required: true
+    description: "Paste reviewer comments (copy from journal system)"
+  - name: manuscript
+    required: false
+    description: "Original manuscript (for context)"
+  - name: target_journal
+    required: true
+  - name: language
+    required: false
+    default: "auto-detect"
+
+phases:
+  - id: 1a
+    name: "Comment Classification & Strategy"
+    executor: peer-reviewer
+    command: "*rebuttal --classify {reviewer_comments} --journal {target_journal}"
+    parallel_group: A
+    outputs: [classified_comments, strategy_report]
+
+  - id: 1b
+    name: "Scientific Validity Assessment"
+    executor: critical-analyst
+    command: "*analyze {reviewer_comments} --mode rebuttal-validity"
+    parallel_group: A
+    outputs: [validity_assessment, concede_vs_defend]
+
+  - id: 2
+    name: "Write Responses"
+    executor: scientific-writer
+    command: "*write rebuttal --strategy {strategy_report}"
+    depends_on: [1a, 1b]
+    checkpoint: true
+    checkpoint_message: "Strategy ready. Proceed with writing responses?"
+    inputs_from:
+      - phase: 1a
+        outputs: [classified_comments, strategy_report]
+      - phase: 1b
+        outputs: [validity_assessment, concede_vs_defend]
+    outputs: [response_letter_draft]
+
+  - id: 3
+    name: "Revise Manuscript Sections"
+    executor: scientific-writer
+    command: "*rewrite --for-resubmission"
+    depends_on: [2]
+    outputs: [revised_sections]
+
+  - id: 4
+    name: "Resubmission Package"
+    executor: nexus
+    action: assemble_resubmission_package
+    depends_on: [2, 3]
+    outputs: [complete_package]
+
+deliverables:
+  - type: response_letter
+    description: "Formal response to all reviewers"
+  - type: revised_sections
+    description: "Changed manuscript sections with tracked changes noted"
+  - type: decision_log
+    description: "Which reviewer points were accepted/rejected and why"
+  - type: researcher_notes
+    description: "Points requiring researcher's specific knowledge or decisions"

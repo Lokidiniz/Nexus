@@ -1,0 +1,77 @@
+name: Team Health Sciences
+slug: team-health
+icon: 🏥
+description: "Specialized team for health sciences — clinical research, public health, epidemiology, Brazilian SUS context"
+trigger: "*team health"
+version: 2.0.0
+
+agents:
+  primary: nexus
+  squad:
+    - literature-researcher
+    - methodologist
+    - data-specialist
+    - scientific-writer
+    - peer-reviewer
+    - critical-analyst
+
+context:
+  field: "Health Sciences"
+  subfields: [medicine, nursing, pharmacy, dentistry, public_health, epidemiology, collective_health]
+  typical_journals:
+    - name: "Cadernos de Saúde Pública"
+      qualis: A2
+      scope: "public health, Brazilian context, epidemiology, qualitative"
+    - name: "Ciência & Saúde Coletiva"
+      qualis: A2
+      scope: "health policies, social determinants, SUS"
+    - name: "Revista de Saúde Pública"
+      qualis: A2
+      scope: "epidemiology, population health"
+    - name: "BMJ / Lancet / NEJM"
+      if: ">40"
+      scope: "RCT, clinical impact, global relevance"
+    - name: "PLOS ONE"
+      if: ~3
+      scope: "broad health sciences, open access"
+  databases:
+    primary: [PubMed, LILACS, SciELO, Cochrane]
+    secondary: [MEDLINE, Embase, BVS]
+  reporting_guidelines:
+    rct: CONSORT
+    observational: STROBE
+    systematic_review: PRISMA
+    case_report: CARE
+    qualitative: COREQ
+
+methodology_defaults:
+  quantitative:
+    - RCT (gold standard for interventions)
+    - Cohort (prospective, RR calculation)
+    - Case-control (retrospective, OR calculation)
+    - Cross-sectional (prevalence, surveys)
+    - Systematic review + meta-analysis
+  qualitative:
+    - Phenomenology (patient experience)
+    - Grounded theory (health service)
+    - Content analysis (health policies)
+  sample_size_tools: [G*Power, OpenEpi, PS_Power]
+  ethics:
+    brazil: "CEP/CONEP mandatory (Res. 466/2012 clinical | 510/2016 qualitative)"
+    international: "IRB (USA) | Ethics Committee (EU) | Declaration of Helsinki"
+
+typical_pipelines:
+  clinical_study:
+    workflow: full-manuscript
+    notes: "CONSORT/STROBE compliance mandatory"
+  systematic_review:
+    workflow: literature-review
+    notes: "PRISMA checklist, PROSPERO pre-registration recommended"
+  sus_policy_analysis:
+    workflow: literature-review
+    notes: "Include Brazilian health policy context, DATASUS data"
+
+constitution_notes:
+  - "Patient data: anonymization mandatory, CEP number required in manuscript"
+  - "Clinical trials: registration (ClinicalTrials.gov or ReBEC) required for publication"
+  - "Effect sizes must be reported — p-value alone is insufficient"

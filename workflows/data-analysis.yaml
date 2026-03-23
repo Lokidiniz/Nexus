@@ -1,0 +1,73 @@
+name: Data Analysis
+slug: data-analysis
+description: "From raw data to publication-ready analysis — statistics, figures, and interpretation"
+version: 2.0.0
+trigger: "*pipeline data-analysis"
+
+inputs:
+  - name: data_description
+    required: true
+    description: "Describe your data (type, format, measurements, n)"
+  - name: research_question
+    required: false
+  - name: target_journal
+    required: false
+  - name: technique
+    required: false
+    description: "cv / dpv / swv / eis / survey / clinical / qualitative / other"
+
+phases:
+  - id: 1
+    name: "Data Assessment"
+    executor: data-specialist
+    command: "*assess-data --technique {technique}"
+    checkpoint: true
+    checkpoint_message: "Data sufficiency assessed. Proceed with analysis?"
+    outputs: [sufficiency_report, missing_data, recommended_tests]
+
+  - id: 2
+    name: "Statistical Analysis"
+    executor: data-specialist
+    command: "*stats --tests {recommended_tests}"
+    depends_on: [1]
+    outputs: [statistical_results, parameters]
+
+  - id: 3
+    name: "Figure Planning"
+    executor: data-specialist
+    command: "*figures --journal {target_journal}"
+    depends_on: [2]
+    outputs: [figure_descriptions, figure_specs]
+
+  - id: 4
+    name: "Validity Check"
+    executor: critical-analyst
+    command: "*analyze {statistical_results} --mode data-validity"
+    depends_on: [2]
+    parallel: true
+    outputs: [validity_report, concerns]
+
+  - id: 5
+    name: "Results Interpretation"
+    executor: data-specialist
+    command: "*interpret --context {research_question}"
+    depends_on: [2, 4]
+    outputs: [interpretation, researcher_decisions]
+
+  - id: 6
+    name: "Delivery"
+    executor: nexus
+    action: integrate_and_deliver
+    depends_on: [1, 2, 3, 4, 5]
+
+deliverables:
+  - type: analysis_report
+    description: "Complete statistical analysis with all parameters"
+  - type: figure_plan
+    description: "Figure descriptions, axes, error bars, captions"
+  - type: interpretation
+    description: "Results interpretation ready for Discussion section"
+  - type: sufficiency_report
+    description: "What data is still needed for publication"
+  - type: researcher_notes
+    description: "Decisions only the researcher can make"

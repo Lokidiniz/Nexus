@@ -1,0 +1,86 @@
+name: Thesis / Dissertation Support
+slug: thesis
+description: "Chapter-by-chapter support for thesis and dissertations — any format (ABNT, APA, etc.)"
+version: 2.0.0
+trigger: "*pipeline thesis"
+
+inputs:
+  - name: chapter
+    required: true
+    description: "intro / literature-review / methods / results / discussion / conclusion / all"
+  - name: topic
+    required: true
+  - name: level
+    required: false
+    default: "masters"
+    description: "undergrad / masters / phd"
+  - name: format
+    required: false
+    default: "abnt"
+    description: "abnt / apa / vancouver / other"
+  - name: institution
+    required: false
+  - name: language
+    required: false
+    default: "pt-br"
+
+chapter_pipelines:
+  literature-review:
+    phases:
+      - executor: literature-researcher
+        command: "*search {topic} --depth comprehensive"
+      - executor: scientific-writer
+        command: "*write literature-review --level {level} --format {format}"
+      - executor: critical-analyst
+        command: "*validate-methods --mode theoretical-framework"
+
+  methods:
+    phases:
+      - executor: methodologist
+        command: "*design {topic} --level {level}"
+      - executor: scientific-writer
+        command: "*write methods --format {format} --level {level}"
+      - executor: critical-analyst
+        command: "*validate-methods"
+
+  results:
+    phases:
+      - executor: data-specialist
+        command: "*assess-data --for-thesis"
+      - executor: scientific-writer
+        command: "*write results --format {format}"
+
+  discussion:
+    phases:
+      - executor: critical-analyst
+        command: "*analyze --mode discussion-builder"
+      - executor: scientific-writer
+        command: "*write discussion --format {format}"
+
+  all:
+    description: "Full thesis — runs all chapter pipelines sequentially"
+    phases:
+      - pipeline: literature-review
+      - pipeline: methods
+      - pipeline: results
+      - pipeline: discussion
+      - executor: scientific-writer
+        command: "*write conclusion --format {format}"
+      - executor: peer-reviewer
+        command: "*review --mode committee-simulation --level {level}"
+
+quality_gates:
+  - check: format_compliance
+    on_fail: warn
+    message: "Verify formatting matches {format} standards"
+  - check: references_have_doi
+    on_fail: warn
+
+deliverables:
+  - type: markdown
+    content: chapter_text
+  - type: researcher_notes
+    description: "What needs advisor review, data still needed, personal decisions"
+  - type: defense_prep
+    description: "Anticipated committee questions and suggested answers"
+    optional: true

@@ -1,0 +1,56 @@
+name: Pre-Submission Review
+slug: pre-submission
+description: "Final review before journal submission — simulate peer review + strengthen manuscript"
+version: 2.0.0
+trigger: "*pipeline pre-submission"
+
+inputs:
+  - name: manuscript
+    required: true
+    description: "Paste manuscript text or provide file path"
+  - name: target_journal
+    required: true
+  - name: language
+    required: false
+    default: "auto-detect"
+
+phases:
+  - id: 1a
+    name: "Peer Review Simulation"
+    executor: peer-reviewer
+    command: "*review --journal {target_journal}"
+    parallel_group: A
+    outputs: [review_report, recommendation, score]
+
+  - id: 1b
+    name: "Critical Flaw Analysis"
+    executor: critical-analyst
+    command: "*analyze {manuscript} --mode pre-submission"
+    parallel_group: A
+    outputs: [critical_report, major_concerns, minor_concerns]
+
+  - id: 2
+    name: "Targeted Rewriting"
+    executor: scientific-writer
+    command: "*rewrite --fix-critical-issues"
+    depends_on: [1a, 1b]
+    checkpoint: true
+    checkpoint_message: "Issues identified. Proceed with rewriting problem sections?"
+    outputs: [improved_sections]
+
+  - id: 3
+    name: "Final Delivery"
+    executor: nexus
+    action: integrate_and_deliver
+    depends_on: [1a, 1b, 2]
+    outputs: [submission_package]
+
+deliverables:
+  - type: review_report
+    description: "Full simulated peer review with scores"
+  - type: improved_manuscript
+    description: "Revised sections addressing critical concerns"
+  - type: submission_checklist
+    description: "Pre-submission checklist for target journal"
+  - type: cover_letter
+    optional: true

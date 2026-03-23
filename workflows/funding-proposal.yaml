@@ -1,0 +1,113 @@
+name: Funding Proposal
+slug: funding-proposal
+description: "Research funding proposal — CNPq, CAPES, FAPEMA, FINEP, NSF, FAPESP, CONACYT, CONICET"
+version: 2.0.0
+trigger: "*pipeline funding-proposal"
+
+inputs:
+  - name: agency
+    required: true
+    description: "Funding agency (cnpq / capes / fapema / finep / nsf / fapesp / conacyt / conicet / other)"
+  - name: topic
+    required: true
+  - name: call_number
+    required: false
+    description: "Specific call/edital number"
+  - name: budget
+    required: false
+  - name: duration
+    required: false
+    default: "24 months"
+  - name: language
+    required: false
+    default: "auto-detect"
+
+agency_profiles:
+  cnpq:
+    format: "Universal/Produtividade"
+    sections: [summary, objectives, justification, methodology, references, budget, schedule]
+    word_limit: 30000
+    language: pt-br
+  capes:
+    format: "PROAP/PROEX/PDPG"
+    sections: [summary, objectives, activities, expected_results, budget]
+    language: pt-br
+  fapema:
+    format: "Universal/Bandeirante"
+    sections: [summary, justification, objectives, methodology, impact, budget]
+    language: pt-br
+  nsf:
+    format: "Standard Grant"
+    sections: [project_summary, project_description, references, budget_justification]
+    word_limit: 15000
+    language: en
+  fapesp:
+    format: "Regular/Jovem Pesquisador"
+    sections: [summary, objectives, methodology, innovation, references, budget]
+    language: pt-br
+
+phases:
+  - id: 1a
+    name: "State of the Art"
+    executor: literature-researcher
+    command: "*search {topic} --mode proposal-justification"
+    parallel_group: A
+    outputs: [literature_summary, key_gaps]
+
+  - id: 1b
+    name: "Methodological Design"
+    executor: methodologist
+    command: "*design {topic} --for-proposal --agency {agency}"
+    parallel_group: A
+    outputs: [study_design, sampling_plan, ethics_requirements]
+
+  - id: 2
+    name: "Innovation & Positioning"
+    executor: critical-analyst
+    command: "*check-novelty --mode proposal --agency {agency}"
+    depends_on: [1a, 1b]
+    inputs_from:
+      - phase: 1a
+        outputs: [literature_summary, key_gaps]
+      - phase: 1b
+        outputs: [study_design]
+    checkpoint: true
+    checkpoint_message: "Novelty assessment done. Innovation is strong enough to proceed?"
+    outputs: [innovation_report, risk_analysis]
+
+  - id: 3
+    name: "Write Proposal"
+    executor: scientific-writer
+    command: "*write proposal --agency {agency} --lang {language}"
+    depends_on: [1a, 1b, 2]
+    inputs_from:
+      - phase: 1a
+        outputs: [literature_summary, key_gaps]
+      - phase: 1b
+        outputs: [study_design, sampling_plan, ethics_requirements]
+      - phase: 2
+        outputs: [innovation_report]
+    outputs: [proposal_draft]
+
+  - id: 4
+    name: "Critical Review"
+    executor: critical-analyst
+    command: "*analyze {proposal_draft} --mode funding-review --agency {agency}"
+    depends_on: [3]
+    checkpoint: true
+    outputs: [review_notes, strengthening_suggestions]
+
+  - id: 5
+    name: "Final Revision & Delivery"
+    executor: scientific-writer
+    command: "*rewrite --incorporate-review"
+    depends_on: [3, 4]
+    outputs: [final_proposal]
+
+deliverables:
+  - type: markdown
+    content: final_proposal
+  - type: section_checklist
+    description: "Verify each required section is complete"
+  - type: researcher_notes
+    description: "Budget, schedule, and CVs still needed from researcher"

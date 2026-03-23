@@ -1,0 +1,68 @@
+name: Team Electrochemistry
+slug: team-electrochemistry
+icon: ⚡
+description: "Specialized team for electrochemical sensors, MOFs/ZIFs, modified electrodes, and 3D-printed devices"
+trigger: "*team electrochemistry"
+version: 2.0.0
+
+agents:
+  primary: nexus
+  squad:
+    - literature-researcher
+    - data-specialist
+    - scientific-writer
+    - peer-reviewer
+    - critical-analyst
+
+context:
+  field: "Electroanalytical Chemistry"
+  techniques: [CV, DPV, SWV, EIS, CA]
+  common_materials: [graphene, carbon_paste, ZIF-8, ZIF-67, MOFs, gold, ITO, SPE]
+  common_analytes: [heavy_metals, pesticides, antibiotics, hormones, neurotransmitters, dopamine]
+  typical_journals:
+    - name: "Biosensors and Bioelectronics"
+      if: ~10
+      scope: "sensors with clinical/food safety application"
+    - name: "Sensors and Actuators B: Chemical"
+      if: ~8
+      scope: "sensing performance + real sample validation"
+    - name: "Electrochimica Acta"
+      if: ~6
+      scope: "electrochemical fundamentals + method development"
+    - name: "Analytical Chemistry"
+      if: ~7
+      scope: "rigorous analytical validation, IUPAC guidelines"
+    - name: "Journal of Electroanalytical Chemistry"
+      if: ~4
+      scope: "electrochemical characterization"
+    - name: "Microchemical Journal"
+      if: ~4
+      scope: "miniaturized sensors, low-cost devices"
+
+mandatory_data:
+  - CV characterization (electrode modification steps)
+  - DPV or SWV analytical curve (R² ≥ 0.998)
+  - LOD/LOQ calculated by 3σ/S method
+  - Selectivity (interference test with common coexisting species)
+  - Stability study (at least 7 days or 100 scans)
+  - Real sample recovery (95–105%)
+
+typical_pipelines:
+  new_sensor:
+    description: "From concept to publication-ready manuscript"
+    workflow: full-manuscript
+    estimated_steps: 7
+  quick_lod:
+    description: "Calculate analytical parameters from DPV/SWV data"
+    workflow: data-analysis
+    estimated_steps: 3
+  pre_submission_sensors:
+    description: "Pre-review for sensor manuscript"
+    workflow: pre-submission
+    estimated_steps: 4
+
+constitution_notes:
+  - "LOD/LOQ must be calculated from provided data — never assumed or taken from 'typical values'"
+  - "Comparison table with literature must use real cited works with DOI"
+  - "Real sample recovery is mandatory — lab matrix validation does not replace it"
+  - "IUPAC definitions must be followed (LOD = 3σ/S, not signal-to-noise unless justified)"
