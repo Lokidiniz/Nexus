@@ -1,0 +1,116 @@
+name: poster
+description: "Scientific poster for conferences (A0/A1, horizontal/vertical)"
+version: "1.0"
+
+inputs:
+  - manuscript_or_data: "Source material (article draft, data, or bullet points)"
+  - conference: "Target conference name"
+  - format: "A0 | A1 | custom dimensions"
+  - orientation: "horizontal | vertical"
+  - sections_to_highlight: "Key results to feature prominently"
+
+phases:
+  - id: 1
+    name: content_strategy
+    agent: critical-analyst
+    task: analyze
+    description: "Analyze the source material and define what belongs on the poster"
+    inputs: [manuscript_or_data, conference]
+    prompt: |
+      Analyze the source material and produce:
+      1. Poster narrative: single message the viewer should leave with
+      2. Content hierarchy: what is essential vs. optional
+      3. Key result to feature: the most visually compelling finding
+      4. Text volume estimate: title + 5 sections, total ~300–500 words
+      5. Figures needed: which panels from the paper translate best to poster
+    output: content_strategy
+
+  - id: 2
+    name: structure_and_text
+    agent: scientific-writer
+    task: write-section
+    description: "Write all poster text blocks — concise, visual-first"
+    depends_on: [1]
+    inputs: [content_strategy, manuscript_or_data]
+    prompt: |
+      Write poster text using this structure:
+
+      TITLE: concise, impactful (≤15 words)
+      AUTHORS + AFFILIATIONS: as provided
+
+      INTRODUCTION (60–80 words max):
+      - Problem statement (1-2 sentences)
+      - Gap (1 sentence)
+      - Objective (1 sentence)
+
+      METHODS (80–100 words max):
+      - Key steps only — enough to understand, not to replicate
+      - Use bullet points or numbered steps
+
+      RESULTS (primary content — 100–120 words + figure captions):
+      - Main result first, prominently
+      - Supporting data second
+      - Figure/table captions: 1 sentence each
+
+      CONCLUSION (40–60 words):
+      - Restate result + contribution + 1 future direction
+
+      REFERENCES: 3–5 key references only (abbreviated format)
+
+      ACKNOWLEDGMENTS: 1–2 lines (funding agencies, institutions)
+
+      Citation rule: [REF NEEDED: description] if unsure
+    output: poster_text
+
+  - id: 3
+    name: figure_plan
+    agent: data-specialist
+    task: plan-figures
+    description: "Plan the poster figures — visual hierarchy and layout"
+    parallel_group: B
+    depends_on: [1]
+    inputs: [manuscript_or_data, content_strategy, format, orientation]
+    prompt: |
+      Plan the poster figures:
+      1. Primary figure: the result that anchors the entire poster
+         - Type: (graphical abstract / key data panel / composite)
+         - Dimensions: estimated space allocation
+         - Color palette recommendation (accessible, print-safe)
+      2. Secondary figures (if space allows): 1–2 supporting panels
+      3. Layout sketch: text-to-figure ratio (target: 40% text, 60% visual)
+      4. Graphical abstract possibility: yes/no + brief description
+      5. Software/tool recommendations for each figure
+    output: figure_plan
+
+  - id: 4
+    name: integration
+    agent: nexus
+    description: "Integrate text + figure plan into final poster specification"
+    depends_on: [2, 3]
+    inputs: [poster_text, figure_plan, format, orientation, conference]
+    prompt: |
+      Integrate poster text and figure plan into a complete poster specification.
+      Include:
+      - Final text blocks (ready to paste into design software)
+      - Figure placement map with dimensions
+      - Color and typography suggestions
+      - Print checklist (resolution, bleed, font embedding)
+      - Digital version notes (QR code for full paper?)
+    output: poster_specification
+
+quality_gates:
+  - "No [N] placeholders — all citations as [REF NEEDED: description] or confirmed"
+  - "Total word count within poster limits (300–500 words body text)"
+  - "Primary figure clearly identified and captioned"
+  - "Researcher decisions listed (design choices, figure data)"
+
+deliverables:
+  - name: "poster_specification.md"
+    description: "Complete poster spec: text blocks + figure plan + layout"
+  - name: "poster_checklist.md"
+    description: "Print and digital publication checklist"
+
+limitations:
+  - "Does not generate actual figure files — provides plans and data for researcher to execute"
+  - "Design layout is text-based — transfer to Inkscape, PowerPoint, Canva, or LaTeX beamerposter"
+  - "Font/color recommendations are generic — adapt to conference template if provided"

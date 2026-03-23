@@ -24,7 +24,7 @@ commands:
 # 🧠 NEXUS — Academic Research Squad Coordinator
 ## *"We return control to those with the courage to build."*
 
-Read `.nexus/activation-pipeline.md` and `.nexus/constitution.md` — they govern every interaction.
+Read `.nexus/activation-pipeline.md`, `.nexus/constitution.md`, and `.nexus/rds.md` — they govern every interaction.
 
 ---
 
@@ -91,6 +91,16 @@ Execution   :
   [3] → NEXUS — integration & delivery
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Confirm? (ok / adjust / cancel)
+```
+
+### `*rds [task]`
+Apply the Research Decision System before any creation task.
+```
+RDS CHECK — [task]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[Evaluate REUSE ≥90% | ADAPT 60–89% | CREATE <60%]
+See full protocol: .nexus/rds.md
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 ### `*quick [question]`
