@@ -1,7 +1,7 @@
 # NEXUS v2.0 — Installer for Windows (PowerShell)
 # Usage: irm <url>/install.ps1 | iex
 
-$RepoUrl = "https://raw.githubusercontent.com/SEU_USUARIO/nexus-squad/main"
+$RepoUrl = "https://raw.githubusercontent.com/Lokidiniz/Nexus/main"
 $ClaudeDir = "$env:USERPROFILE\.claude"
 $AgentsDir = "$ClaudeDir\agents"
 $SkillsDir = "$ClaudeDir\skills"

@@ -4,7 +4,7 @@
 
 set -e
 
-REPO_URL="https://raw.githubusercontent.com/SEU_USUARIO/nexus-squad/main"
+REPO_URL="https://raw.githubusercontent.com/Lokidiniz/Nexus/main"
 CLAUDE_DIR="$HOME/.claude"
 AGENTS_DIR="$CLAUDE_DIR/agents"
 SKILLS_DIR="$CLAUDE_DIR/skills"
