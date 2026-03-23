@@ -1,0 +1,48 @@
+name: Feature Request
+description: Suggest a new command, workflow, task, or team context
+labels: ["enhancement"]
+body:
+  - type: dropdown
+    id: type
+    attributes:
+      label: Type of contribution
+      options:
+        - New *command for existing agent
+        - New workflow (*pipeline)
+        - New task (tasks/)
+        - New team context (teams/)
+        - New example (examples/)
+        - IDE support (new IDE)
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the research task this would enable or improve
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: Describe the feature. Include command names, output format, or workflow steps if possible.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: field
+    attributes:
+      label: Research field
+      multiple: true
+      options:
+        - core (all fields)
+        - electrochemistry
+        - education
+        - health
+        - social-sciences
+        - engineering
+        - other

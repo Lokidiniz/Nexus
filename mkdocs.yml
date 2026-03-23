@@ -1,0 +1,79 @@
+site_name: NEXUS Academic Research Framework
+site_description: "Open-source AI orchestration squad for scientific research — PT-BR · EN · ES"
+site_url: https://lokidiniz.github.io/Nexus
+repo_url: https://github.com/Lokidiniz/Nexus
+repo_name: Lokidiniz/Nexus
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  language: pt
+  palette:
+    - scheme: default
+      primary: deep purple
+      accent: purple
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: deep purple
+      accent: purple
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - content.code.copy
+  icon:
+    repo: fontawesome/brands/github
+
+nav:
+  - Início: index.md
+  - Instalação: installation.md
+  - Guia de Uso:
+      - Primeiros passos: guide/quickstart.md
+      - Pipelines: guide/pipelines.md
+      - Modos de operação: guide/modes.md
+      - Times de pesquisa: guide/teams.md
+      - RDS: guide/rds.md
+  - Agentes:
+      - Visão geral: agents/overview.md
+      - NEXUS: agents/nexus.md
+      - Literature Researcher: agents/literature-researcher.md
+      - Methodologist: agents/methodologist.md
+      - Critical Analyst: agents/critical-analyst.md
+      - Scientific Writer: agents/scientific-writer.md
+      - Peer Reviewer: agents/peer-reviewer.md
+      - Data Specialist: agents/data-specialist.md
+  - Exemplos:
+      - Eletroquímica: examples/electrochemistry.md
+      - Educação: examples/education.md
+      - Saúde: examples/health.md
+      - Ciências Sociais: examples/social-sciences.md
+  - Arquitetura: architecture.md
+  - Contribuindo: contributing.md
+
+plugins:
+  - search:
+      lang: [pt, en, es]
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - tables
+  - attr_list
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/Lokidiniz/Nexus
+  version:
+    provider: mike

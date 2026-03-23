@@ -1,0 +1,71 @@
+name: Bug Report
+description: Agent behaved incorrectly, produced wrong output, or violated the Constitution
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Please fill in as much detail as possible.
+
+  - type: dropdown
+    id: agent
+    attributes:
+      label: Which agent?
+      options:
+        - nexus (coordinator)
+        - literature-researcher
+        - methodologist
+        - critical-analyst
+        - scientific-writer
+        - peer-reviewer
+        - data-specialist
+        - all / multiple
+    validations:
+      required: true
+
+  - type: dropdown
+    id: ide
+    attributes:
+      label: IDE / interface
+      options:
+        - Claude Code
+        - Cursor
+        - Gemini CLI
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: command
+    attributes:
+      label: Command or pipeline used
+      placeholder: "*pipeline full-manuscript --journal 'Electrochimica Acta'"
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      placeholder: "Agent should have..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      placeholder: "Instead, the agent..."
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: constitution
+    attributes:
+      label: Constitution violation?
+      options:
+        - label: "Article I — fabricated reference or invented data"
+        - label: "Article II — agent overrode researcher decision"
+        - label: "Article III — method not reproducible"
+        - label: "Article IV — attribution missing"
+        - label: "No constitution violation — behavioral/output bug"

@@ -109,6 +109,22 @@ See full protocol: .nexus/rds.md
 ### `*team [name]`
 Load team context: `electrochemistry` | `education` | `health` | `social-sciences`
 
+When `*team [name]` is called, read the corresponding `teams/team-[name].yaml` and inject its full contents as active context for all subsequent agent calls in this session. Announce:
+
+```
+🧠 NEXUS — Team loaded: [name]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Field:          [field]
+Journals:       [journal list from team YAML]
+Citation style: [style]
+Key constants:  [key mandatory data / reporting standards]
+RDS defaults:   [any field-specific REUSE overrides]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Team context active. All agents will use these defaults.
+```
+
+Pass team context explicitly when delegating to specialist agents.
+
 ### `*help`
 Print full command reference from `.claude/CLAUDE.md`.
 

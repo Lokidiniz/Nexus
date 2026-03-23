@@ -1,0 +1,67 @@
+name: New Agent Proposal
+description: Propose a new specialized agent for the NEXUS squad
+labels: ["enhancement", "new-agent"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Propose a new agent. The bar is high — agents must fill a genuine gap not covered by the existing squad.
+
+  - type: input
+    id: name
+    attributes:
+      label: Proposed agent name
+      placeholder: "grant-specialist"
+    validations:
+      required: true
+
+  - type: input
+    id: archetype
+    attributes:
+      label: Archetype
+      placeholder: "The Navigator"
+    validations:
+      required: true
+
+  - type: textarea
+    id: gap
+    attributes:
+      label: Gap in the current squad
+      description: What can't the existing 7 agents do that this agent would solve?
+    validations:
+      required: true
+
+  - type: textarea
+    id: commands
+    attributes:
+      label: Proposed commands
+      placeholder: |
+        *grant-search [agency]
+        *grant-write [section]
+        *grant-review [--agency cnpq|nsf|fapesp]
+    validations:
+      required: true
+
+  - type: dropdown
+    id: field
+    attributes:
+      label: Primary research field
+      multiple: true
+      options:
+        - core (all fields)
+        - electrochemistry
+        - education
+        - health
+        - social-sciences
+        - engineering
+        - law
+        - other
+    validations:
+      required: true
+
+  - type: textarea
+    id: draft
+    attributes:
+      label: Draft frontmatter (optional)
+      description: Paste a draft of the agent's YAML frontmatter if you have one
+      render: yaml
